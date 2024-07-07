@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Transaction{% endblock %}
+
+{% block content %}
+<div class="transaction-form-container">
+    <h2>Create Transaction</h2>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="account">Account</label>
+            <select id="account" name="account" required>
+                {% for account in accounts %}
+                <option value="{{ account.id }}">{{ account.account_type }} - {{ account.account_number }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="transaction_type">Transaction Type</label>
+            <select id="transaction_type" name="transaction_type" required>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" maxlength="255" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

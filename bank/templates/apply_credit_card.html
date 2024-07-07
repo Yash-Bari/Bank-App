@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Credit Card</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="form-container">
+            <h2 class="text-center">Apply for a Credit Card</h2>
+            <form method="post" action="{% url 'apply_credit_card' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="card_type">Card Type</label>
+                    <select name="card_type" id="card_type" class="form-control">
+                        {% for value, label in form.card_type.field.choices %}
+                            <option value="{{ value }}" {% if value == form.card_type.value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.card_type.errors %}
+                        <div class="text-danger">{{ form.card_type.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="credit_limit">Credit Limit</label>
+                    <input type="number" name="credit_limit" id="credit_limit" class="form-control" step="0.01" value="{{ form.credit_limit.value }}">
+                    {% if form.credit_limit.errors %}
+                        <div class="text-danger">{{ form.credit_limit.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Application</button>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

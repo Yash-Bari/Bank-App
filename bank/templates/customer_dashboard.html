@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .card-header {
+        background-color: #007bff;
+        color: black;
+        text-align: center;
+        font-size: 1.25rem;
+    }
+    .card-header.bg-success {
+        background-color: #28a745;
+    }
+    .card-header.bg-info {
+        background-color: #17a2b8;
+    }
+    .card-header.bg-warning {
+        background-color: #ffc107;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d;
+    }
+    .card-header.bg-danger {
+        background-color: #dc3545;
+    }
+    .accordion-button {
+        text-align: left;
+        width: 100%;
+        color: white;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    .list-group-item {
+        font-size: 1.1rem;
+    }
+    .img-fluid {
+        max-height: 150px;
+        border-radius: 50%;
+    }
+    .card-body {
+        background-color: #f8f9fa;
+    }
+    .btn-link {
+        color: inherit;
+    }
+    .card {
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .customer-info .row {
+        align-items: center;
+    }
+    .customer-info .col-md-4 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .customer-info img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Customer Information
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                {% if customer.profile_picture %}
+                                <div class="col-md-4 text-center">
+                                    <img src="{{ customer.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
+                                </div>
+                                {% endif %}
+                                <div class="col-md-8">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Name:</strong> {{ customer.name }}</li>
+                                        <li class="list-group-item"><strong>Email:</strong> {{ customer.email }}</li>
+                                        <li class="list-group-item"><strong>Date of Birth:</strong> {{ customer.dob }}</li>
+                                        <li class="list-group-item"><strong>Phone Number:</strong> {{ customer.phone_number }}</li>
+                                        <li class="list-group-item"><strong>Address:</strong> {{ customer.address }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>                        
+            <div class="accordion" id="customerAccordion">
+                <!-- Accounts Section -->
+                <div class="card">
+                    <div class="card-header bg-success" id="headingAccounts">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapseAccounts" aria-expanded="true" aria-controls="collapseAccounts">
+                                Accounts
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseAccounts" class="collapse show" aria-labelledby="headingAccounts" data-parent="#customerAccordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Account Number</th>
+                                        <th>Account Type</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for account in accounts %}
+                                    <tr>
+                                        <td>{{ account.account_number }}</td>
+                                        <td>{{ account.account_type }}</td>
+                                        <td>₹{{ account.balance }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No accounts available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loans Section -->
+                <div class="card">
+                    <div class="card-header bg-info" id="headingLoans">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapseLoans" aria-expanded="false" aria-controls="collapseLoans">
+                                Loans
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseLoans" class="collapse" aria-labelledby="headingLoans" data-parent="#customerAccordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Loan ID</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for loan in loans %}
+                                    <tr>
+                                        <td>{{ loan.id }}</td>
+                                        <td>₹{{ loan.amount }}</td>
+                                        <td>{{ loan.status }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No loans available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Cards Section -->
+                <div class="card">
+                    <div class="card-header bg-warning" id="headingCreditCards">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapseCreditCards" aria-expanded="false" aria-controls="collapseCreditCards">
+                                Credit Cards
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseCreditCards" class="collapse" aria-labelledby="headingCreditCards" data-parent="#customerAccordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Card Number</th>
+                                        <th>Card Type</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for credit_card in credit_cards %}
+                                    <tr>
+                                        <td>{{ credit_card.card_number }}</td>
+                                        <td>{{ credit_card.card_type }}</td>
+                                        <td>{{ credit_card.status }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No credit cards available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investments Section -->
+                <div class="card">
+                    <div class="card-header bg-secondary" id="headingInvestments">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapseInvestments" aria-expanded="false" aria-controls="collapseInvestments">
+                                Investments
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseInvestments" class="collapse" aria-labelledby="headingInvestments" data-parent="#customerAccordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Investment ID</th>
+                                        <th>Investment Type</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for investment in investments %}
+                                    <tr>
+                                        <td>{{ investment.id }}</td>
+                                        <td>{{ investment.investment_type }}</td>
+                                        <td>₹{{ investment.amount }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No investments available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Retirement Plans Section -->
+                <div class="card">
+                    <div class="card-header bg-danger" id="headingRetirementPlans">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapseRetirementPlans" aria-expanded="false" aria-controls="collapseRetirementPlans">
+                                Retirement Plans
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseRetirementPlans" class="collapse" aria-labelledby="headingRetirementPlans" data-parent="#customerAccordion">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Plan ID</th>
+                                        <th>Plan Type</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for retirement_plan in retirement_plans %}
+                                    <tr>
+                                        <td>{{ retirement_plan.id }}</td>
+                                        <td>{{ retirement_plan.plan_type }}</td>
+                                        <td>₹{{ retirement_plan.contribution }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No retirement plans available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

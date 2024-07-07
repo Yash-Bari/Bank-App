@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Additional styles */
+        .sidebar-content .sign-out {
+            margin-bottom: 50px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #aaa;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-content .sign-out:hover {
+            background-color: #444;
+        }
+
+        .sidebar-content .sign-out a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            
+        }
+
+        .sidebar-content .sign-out a i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="user-info">
+                <h4 style="display: inline-block;">Welcome, {{ request.user.username }}</h4>
+                <h5 style="display: inline-block; margin-right: 10px;">({{ request.user.role }})</h5>
+            </div>
+            
+            
+        </div>
+    </header>
+    <div class="container-fluid">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header" id="sidebar-header">
+                <i class="fas fa-university"></i>
+                <span>Retail Bank</span>
+            </div>
+            <div class="sidebar-content"style="margin-top: 40px;">
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        {% if request.user.role == 'admin' %}
+                        <li><a href="{% url 'add_user' %}"><i class="fas fa-user-plus"></i> Add Employee</a></li>
+                        <li><a href="{% url 'teller_dashboard' %}"><i class="fas fa-cash-register"></i> Teller Dashboard</a></li>
+                        <li><a href="{% url 'create_customer' %}"><i class="fas fa-user-plus"></i> Create Customer</a></li>
+                        <li><a href="{% url 'loan_officer_dashboard' %}"><i class="fas fa-hand-holding-usd"></i> Loan Officer Dashboard</a></li>
+                        <li><a href="{% url 'credit_card_manager_dashboard' %}"><i class="fas fa-credit-card"></i> Credit Card Manager Dashboard</a></li>
+                        <li><a href="{% url 'financial_advisor_dashboard' %}"><i class="fas fa-chart-line"></i> Financial Advisor Dashboard</a></li>
+                        {% elif request.user.role == 'teller' %}
+                            <li><a href="{% url 'create_customer' %}"><i class="fas fa-user-plus"></i> Create Customer</a></li>
+                        {% elif request.user.role == 'loan_officer' %}
+                            <li><a href="{% url 'loan_officer_dashboard' %}"><i class="fas fa-hand-holding-usd"></i> Loan Officer Dashboard</a></li>
+                        {% elif request.user.role == 'credit_card_manager' %}
+                            <li><a href="{% url 'credit_card_manager_dashboard' %}"><i class="fas fa-credit-card"></i> Credit Card Manager Dashboard</a></li>
+                        {% elif request.user.role == 'financial_advisor' %}
+                            <li><a href="{% url 'financial_advisor_dashboard' %}"><i class="fas fa-chart-line"></i> Financial Advisor Dashboard</a></li>
+                        {% elif request.user.role == 'customer' %}
+                            <li><a href="{% url 'transaction_list' %}"><i class="fas fa-receipt"></i> Transaction History</a></li>
+                            <li><a href="{% url 'create_transaction' %}"><i class="fas fa-rupee"></i> Create Transaction</a></li>
+                            <li><a href="{% url 'apply_loan' %}"><i class="fas fa-hand-holding-usd"></i> Apply for Loan</a></li>
+                            <li><a href="{% url 'apply_credit_card' %}"><i class="fas fa-credit-card"></i> Apply for Credit Card</a></li>
+                            <li><a href="{% url 'apply_investment' %}"><i class="fas fa-chart-line"></i> Apply for Investment</a></li>
+                            <li><a href="{% url 'apply_retirement_plan' %}"><i class="fas fa-shield-alt"></i> Apply for Retirement Plan</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <div class="sign-out">
+                    <a href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2024 Bank Application. All rights reserved.</p>
+    </footer>
+    <script>
+        function toggleSidebar() {
+            var sidebarContent = document.querySelector(".sidebar-content");
+            sidebarContent.classList.toggle("active");
+        }
+    </script>
+    <script>
+        // Get the sidebar header element
+        var sidebarHeader = document.getElementById('sidebar-header');
+    
+        // Add click event listener to redirect
+        sidebarHeader.addEventListener('click', function() {
+            window.location.href = "{% url 'dashboard' %}";
+        });
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

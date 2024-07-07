@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Financial Advisor Dashboard{% endblock %}
+
+{% block content %}
+<section class="advisor-section">
+    <h2>Investments Overview</h2>
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Investment Type</th>
+                    <th>Amount</th>
+                    <th>Return Rate (%)</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for investment in investments %}
+                    <tr>
+                        <td>{{ investment.customer }}</td>
+                        <td>{{ investment.get_investment_type_display }}</td>
+                        <td>{{ investment.amount }}</td>
+                        <td>{{ investment.return_rate }}</td>
+                        <td>{{ investment.created_at|date:"F d, Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No investments found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

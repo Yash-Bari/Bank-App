@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2 class="dashboard-title">Loan Officer Dashboard</h2>
+    <div class="dashboard-section">
+        <h3 class="dashboard-subtitle">Loans</h3>
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th scope="col">Loan ID</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Loan Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Interest Rate</th>
+                    <th scope="col">Term (Months)</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.id }}</td>
+                    <td>{{ loan.customer.name }}</td>
+                    <td>{{ loan.loan_type }}</td>
+                    <td>{{ loan.amount }}</td>
+                    <td>{{ loan.interest_rate }}%</td>
+                    <td>{{ loan.term_months }}</td>
+                    <td>
+                        {% if loan.status == 'pending' %}
+                        <span class="badge badge-warning">Pending</span>
+                        {% elif loan.status == 'approved' %}
+                        <span class="badge badge-success">Approved</span>
+                        {% else %}
+                        <span class="badge badge-danger">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if loan.status == 'pending' %}
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                            <button type="submit" name="action" value="approve" class="btn-action btn-create">Approve</button>
+                            <button type="submit" name="action" value="reject" class="btn-action btn-delete">Reject</button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">No actions available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+<style>
+    .dashboard-container {
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+
+    .dashboard-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #333;
+    }
+
+    .dashboard-section {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-subtitle {
+        margin-bottom: 15px;
+        font-size: 24px;
+        color: #555;
+    }
+
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .dashboard-table th, .dashboard-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .dashboard-table th {
+        background-color: #f7f7f7;
+        font-weight: 600;
+    }
+
+    .dashboard-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #fff;
+        transition: background 0.3s;
+    }
+
+    .btn-create {
+        background-color: #007bff;
+    }
+
+    .btn-create:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-edit {
+        background-color: #28a745;
+    }
+
+    .btn-edit:hover {
+        background-color: #218838;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    .btn-add-account {
+        background-color: #ffc107;
+    }
+
+    .btn-add-account:hover {
+        background-color: #e0a800;
+    }
+</style>

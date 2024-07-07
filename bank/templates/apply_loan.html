@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 style="margin-bottom: 2rem; text-align: center;">Apply for a Loan</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="id_loan_type" class="form-label font-weight-bold"><i class="fas fa-file-alt"></i> Loan Type</label>
+                    <select class="form-control" id="id_loan_type" name="loan_type" required>
+                        <option value="" disabled selected>Select loan type</option>
+                        <option value="personal">Personal Loan</option>
+                        <option value="auto">Auto Loan</option>
+                        <option value="mortgage">Mortgage Loan</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="id_amount" class="form-label"><i class="fas fa-dollar-sign"></i> Amount</label>
+                    <input type="number" class="form-control" id="id_amount" name="amount" placeholder="Enter loan amount" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="id_interest_rate" class="form-label"><i class="fas fa-percent"></i> Interest Rate (%)</label>
+                    <input type="number" step="0.01" class="form-control" id="id_interest_rate" name="interest_rate" placeholder="Enter interest rate" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="id_term_months" class="form-label"><i class="far fa-calendar-alt"></i> Term (months)</label>
+                    <input type="number" class="form-control" id="id_term_months" name="term_months" placeholder="Enter term in months" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-check-circle"></i> Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

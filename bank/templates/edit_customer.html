@@ -1,0 +1,6 @@
+<h2>Edit Customer</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ customer_form.as_p }}
+    <button type="submit">Save Changes</button>
+</form>
